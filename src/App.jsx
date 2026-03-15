@@ -128,6 +128,57 @@ function SectionBlock({ title, description, children, center = false }) {
   );
 }
 
+function IntroEmpathyCarousel() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveIndex((current) => (current + 1) % empathyCards.length);
+    }, 2200);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="space-y-3">
+      <div className="relative min-h-[210px] overflow-hidden rounded-[30px] border border-pink-100 bg-white/96 p-5 shadow-soft">
+        {empathyCards.map((card, index) => {
+          const active = index === activeIndex;
+          return (
+            <div
+              key={card.title}
+              className={`absolute inset-0 flex flex-col justify-center p-5 transition-all duration-700 ${
+                active
+                  ? "translate-y-0 opacity-100"
+                  : index < activeIndex
+                    ? "-translate-y-6 opacity-0"
+                    : "translate-y-6 opacity-0"
+              }`}
+            >
+              <div className="mb-4 h-11 w-11 rounded-[18px] bg-pink-50" />
+              <h3 className="text-[24px] font-semibold leading-9 tracking-[-0.04em] text-slate-950">
+                {card.title}
+              </h3>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{card.body}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="flex items-center justify-center gap-2">
+        {empathyCards.map((card, index) => (
+          <span
+            key={card.title}
+            className={`h-2 rounded-full transition-all duration-500 ${
+              index === activeIndex ? "w-8 bg-pink-500" : "w-2 bg-pink-100"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function MobileLandingHero({ onPrimaryClick }) {
   return (
     <section className="relative px-5 pt-5">
@@ -204,37 +255,6 @@ function MobileLandingHero({ onPrimaryClick }) {
         </div>
       </div>
     </section>
-  );
-}
-
-function EmpathyCard({ title, body, delay = 0 }) {
-  const [ref, isInView] = useInView({ threshold: 0.25, once: true });
-  const [pressed, setPressed] = useState(false);
-
-  return (
-    <button
-      ref={ref}
-      type="button"
-      onClick={() => setPressed((value) => !value)}
-      className={`w-full rounded-[28px] border p-5 text-left transition-all duration-500 ${
-        pressed
-          ? "border-pink-200 bg-pink-50/90 shadow-float"
-          : "border-white/80 bg-white/92 shadow-soft"
-      } ${isInView ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div className="space-y-2">
-          <h3 className="text-[17px] font-semibold leading-7 text-slate-950">{title}</h3>
-          <p className="text-sm leading-6 text-slate-600">{body}</p>
-        </div>
-        <div
-          className={`mt-1 h-10 w-10 rounded-2xl transition ${
-            pressed ? "bg-pink-500 shadow-lg shadow-pink-100" : "bg-pink-50"
-          }`}
-        />
-      </div>
-    </button>
   );
 }
 
@@ -680,11 +700,7 @@ export default function App() {
               title="이런 고민, 한 번쯤 해보셨을 거예요"
               description="지치기 쉬운 취업 준비 과정에서 가장 먼저 필요한 건, 내 상황을 이해받고 있다는 감각입니다."
             >
-              <div className="space-y-4">
-                {empathyCards.map((card, index) => (
-                  <EmpathyCard key={card.title} {...card} delay={index * 90} />
-                ))}
-              </div>
+              <IntroEmpathyCarousel />
             </SectionBlock>
 
             <SectionBlock
