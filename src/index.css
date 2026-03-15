@@ -5,8 +5,9 @@
 :root {
   color: #0f172a;
   background:
-    radial-gradient(circle at top, rgba(214, 242, 237, 0.85), transparent 28%),
-    linear-gradient(180deg, #fffaf4 0%, #f8fafc 42%, #eef9f7 100%);
+    radial-gradient(circle at top, rgba(255, 96, 170, 0.14), transparent 26%),
+    radial-gradient(circle at 50% 20%, rgba(255, 210, 231, 0.38), transparent 30%),
+    linear-gradient(180deg, #fffdfd 0%, #fff7fb 45%, #fffafc 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -21,6 +22,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: transparent;
 }
 
 button,

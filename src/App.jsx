@@ -85,7 +85,7 @@ const analysisStatuses = [
   "우선 행동 추천 중",
 ];
 
-function useInView(options = { threshold: 0.25, once: true }) {
+function useInView(options = { threshold: 0.2, once: true }) {
   const ref = useRef(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -102,7 +102,7 @@ function useInView(options = { threshold: 0.25, once: true }) {
           setIsInView(false);
         }
       },
-      { threshold: options.threshold ?? 0.25 },
+      { threshold: options.threshold ?? 0.2 },
     );
 
     observer.observe(node);
@@ -112,102 +112,97 @@ function useInView(options = { threshold: 0.25, once: true }) {
   return [ref, isInView];
 }
 
-function SectionTitle({ eyebrow, title, description, align = "left" }) {
-  const alignment = align === "center" ? "text-center items-center" : "text-left items-start";
-
+function SectionBlock({ title, description, children, center = false }) {
   return (
-    <div className={`flex flex-col gap-3 ${alignment}`}>
-      {eyebrow ? (
-        <span className="inline-flex rounded-full bg-white/70 px-3 py-1 text-xs font-semibold tracking-wide text-brand-700 shadow-sm ring-1 ring-brand-100">
-          {eyebrow}
-        </span>
-      ) : null}
-      <div className="space-y-2">
-        <h2 className="text-[28px] font-bold leading-[1.2] tracking-[-0.03em] text-slate-950">
-          {title}
-        </h2>
-        <p className="text-sm leading-6 text-slate-600">{description}</p>
+    <section className="relative">
+      <div className={`space-y-5 ${center ? "text-center" : ""}`}>
+        <div className={`space-y-3 ${center ? "text-center" : ""}`}>
+          <h2 className="text-[29px] font-bold leading-[1.18] tracking-[-0.04em] text-slate-950">
+            {title}
+          </h2>
+          <p className="text-[15px] leading-7 text-slate-600">{description}</p>
+        </div>
+        {children}
       </div>
-    </div>
+    </section>
   );
 }
 
 function MobileLandingHero({ onPrimaryClick }) {
-  const [heroRef, heroVisible] = useInView({ threshold: 0.5, once: false });
-
   return (
-    <section ref={heroRef} className="relative overflow-hidden px-5 pt-6">
-      <div className="mx-auto max-w-sm rounded-[34px] border border-white/70 bg-white/75 p-5 shadow-soft backdrop-blur">
-        <div className="mb-6 flex items-center justify-between">
-          <div className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
-            <span className="h-2 w-2 rounded-full bg-brand-500" />
-            취팡 AI 전략 프리뷰
-          </div>
-          <span className="text-[11px] font-medium text-slate-400">mobile web</span>
-        </div>
-
-        <div className="space-y-4">
-          <div className="space-y-3">
-            <h1 className="text-[34px] font-bold leading-[1.08] tracking-[-0.05em] text-slate-950">
-              취업에도
-              <br />
-              전략이 필요해요
-            </h1>
-            <p className="text-sm leading-6 text-slate-600">
-              취팡 AI가 당신의 상황을 분석해 지금 필요한 취업 전략을 제안합니다.
-            </p>
-            <p className="text-sm leading-6 text-slate-500">
-              막막하게 공고를 찾고, 지원 가능성을 고민하고, 어디서부터 준비해야 할지 헤매는 시간을 줄여보세요.
-            </p>
-          </div>
-
-          <div className="rounded-[28px] bg-slate-950 p-4 text-white shadow-float">
-            <div className="flex items-center justify-between text-xs text-slate-300">
-              <span>실시간 전략 흐름</span>
-              <span className="inline-flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-coral animate-pulse" />
-                인터랙션 가능
-              </span>
+    <section className="relative px-5 pt-5">
+      <div className="relative overflow-hidden rounded-[36px] border border-white/90 bg-white/95 p-5 shadow-soft">
+        <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,_rgba(255,61,151,0.18),_transparent_72%)]" />
+        <div className="relative">
+          <div className="mb-6 flex items-center justify-between">
+            <div className="inline-flex items-center gap-2 rounded-full bg-pink-50 px-3 py-1 text-xs font-semibold text-pink-700 ring-1 ring-pink-100">
+              <span className="h-2 w-2 rounded-full bg-pink-500" />
+              취팡
             </div>
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              {["고민 선택", "상태 입력", "전략 확인"].map((item, index) => (
-                <div
-                  key={item}
-                  className={`rounded-2xl px-3 py-4 text-center text-xs font-medium ${
-                    index === 1
-                      ? "bg-brand-500 text-white"
-                      : "bg-white/10 text-slate-200"
-                  }`}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
-              <div className="h-full w-2/3 origin-left rounded-full bg-brand-300 animate-pulsebar" />
+            <div className="rounded-full bg-slate-50 px-3 py-1 text-[11px] font-medium text-slate-400">
+              AI 전략 프리뷰
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={onPrimaryClick}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-600 px-4 py-4 text-sm font-semibold text-white shadow-lg shadow-brand-200 transition active:scale-[0.98]"
-          >
-            내 취업 전략 확인하기
-          </button>
+          <div className="space-y-4">
+            <div className="space-y-3">
+              <p className="text-sm font-medium text-pink-600">
+                막막함을 줄이고, 판단 기준을 먼저 세우는 취업 준비
+              </p>
+              <h1 className="text-[36px] font-bold leading-[1.05] tracking-[-0.05em] text-slate-950">
+                취업에도
+                <br />
+                전략이 필요해요
+              </h1>
+              <p className="text-[15px] leading-7 text-slate-600">
+                취팡 AI가 당신의 상황을 분석해 지금 필요한 취업 전략을 제안합니다.
+              </p>
+              <p className="text-[15px] leading-7 text-slate-500">
+                막막하게 공고를 찾고, 지원 가능성을 고민하고, 어디서부터 준비해야 할지 헤매는 시간을 줄여보세요.
+              </p>
+            </div>
 
-          <div className="flex items-center justify-center gap-2 text-xs text-slate-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
-            아래로 스크롤하며 내 상황에 맞는 전략이 연결됩니다
+            <div className="rounded-[28px] border border-pink-100 bg-[linear-gradient(135deg,rgba(255,240,247,0.92),rgba(255,255,255,0.98))] p-4">
+              <div className="flex items-center justify-between text-xs text-slate-500">
+                <span>스크롤하면서 바로 체험하는 전략 흐름</span>
+                <span className="inline-flex items-center gap-2 font-medium text-pink-600">
+                  <span className="h-2 w-2 rounded-full bg-pink-500 animate-pulse" />
+                  인터랙션 연결됨
+                </span>
+              </div>
+              <div className="mt-4 flex items-center gap-2">
+                {["고민", "상태", "전략"].map((item, index) => (
+                  <div key={item} className="flex flex-1 items-center gap-2">
+                    <div
+                      className={`flex h-11 flex-1 items-center justify-center rounded-2xl text-xs font-semibold ${
+                        index === 1
+                          ? "bg-pink-500 text-white shadow-lg shadow-pink-100"
+                          : "bg-white text-slate-500 ring-1 ring-slate-100"
+                      }`}
+                    >
+                      {item}
+                    </div>
+                    {index < 2 ? <div className="h-px flex-1 bg-pink-200" /> : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onPrimaryClick}
+              className="flex w-full items-center justify-center rounded-2xl bg-pink-500 px-4 py-4 text-sm font-semibold text-white shadow-lg shadow-pink-200 transition active:scale-[0.98]"
+            >
+              내 취업 전략 확인하기
+            </button>
+
+            <div className="flex items-center justify-center gap-2 text-xs text-slate-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-pink-500" />
+              아래로 이어지는 흐름 속에서 내 상황이 바로 반영됩니다
+            </div>
           </div>
         </div>
       </div>
-
-      <div
-        className={`pointer-events-none absolute inset-x-14 bottom-0 h-20 rounded-full bg-brand-200/30 blur-3xl transition-opacity duration-500 ${
-          heroVisible ? "opacity-100" : "opacity-30"
-        }`}
-      />
     </section>
   );
 }
@@ -221,25 +216,23 @@ function EmpathyCard({ title, body, delay = 0 }) {
       ref={ref}
       type="button"
       onClick={() => setPressed((value) => !value)}
-      className={`w-full rounded-[26px] border p-5 text-left shadow-soft transition-all duration-300 ${
+      className={`w-full rounded-[28px] border p-5 text-left transition-all duration-500 ${
         pressed
-          ? "border-brand-200 bg-brand-50/80 shadow-float"
-          : "border-white/80 bg-white/85"
-      } ${isInView ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
+          ? "border-pink-200 bg-pink-50/90 shadow-float"
+          : "border-white/80 bg-white/92 shadow-soft"
+      } ${isInView ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-base font-semibold leading-6 text-slate-950">{title}</h3>
-          <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="space-y-2">
+          <h3 className="text-[17px] font-semibold leading-7 text-slate-950">{title}</h3>
+          <p className="text-sm leading-6 text-slate-600">{body}</p>
         </div>
-        <span
-          className={`mt-1 rounded-full px-2 py-1 text-[11px] font-medium ${
-            pressed ? "bg-white text-brand-700" : "bg-slate-100 text-slate-500"
+        <div
+          className={`mt-1 h-10 w-10 rounded-2xl transition ${
+            pressed ? "bg-pink-500 shadow-lg shadow-pink-100" : "bg-pink-50"
           }`}
-        >
-          {pressed ? "공감 중" : "탭 가능"}
-        </span>
+        />
       </div>
     </button>
   );
@@ -250,23 +243,19 @@ function AccordionProblemBlock({ title, detail, open, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="w-full rounded-[24px] border border-slate-200 bg-white/85 p-5 text-left shadow-soft transition active:scale-[0.99]"
+      className="w-full rounded-[26px] border border-white/80 bg-white/92 p-5 text-left shadow-soft transition active:scale-[0.99]"
     >
       <div className="flex items-center justify-between gap-4">
-        <span className="text-sm font-semibold text-slate-900">{title}</span>
+        <span className="text-[15px] font-semibold text-slate-900">{title}</span>
         <span
-          className={`rounded-full bg-slate-100 px-2 py-1 text-xs text-slate-500 transition ${
-            open ? "rotate-45 bg-brand-50 text-brand-700" : ""
+          className={`flex h-8 w-8 items-center justify-center rounded-full text-sm transition ${
+            open ? "rotate-45 bg-pink-500 text-white" : "bg-pink-50 text-pink-500"
           }`}
         >
           +
         </span>
       </div>
-      <div
-        className={`grid transition-all duration-300 ${
-          open ? "grid-rows-[1fr] pt-3" : "grid-rows-[0fr]"
-        }`}
-      >
+      <div className={`grid transition-all duration-300 ${open ? "grid-rows-[1fr] pt-3" : "grid-rows-[0fr]"}`}>
         <div className="overflow-hidden">
           <p className="text-sm leading-6 text-slate-600">{detail}</p>
         </div>
@@ -275,38 +264,38 @@ function AccordionProblemBlock({ title, detail, open, onClick }) {
   );
 }
 
-function ConcernSelector({ options, selectedConcern, onSelect, onNext }) {
-  const selectedOption = options.find((option) => option.id === selectedConcern);
+function ConcernSelector({ selectedConcern, onSelect, onNext }) {
+  const selectedOption = concernOptions.find((option) => option.id === selectedConcern);
 
   return (
     <div className="space-y-4">
-      {options.map((option) => {
+      {concernOptions.map((option, index) => {
         const active = option.id === selectedConcern;
         return (
           <button
             key={option.id}
             type="button"
             onClick={() => onSelect(option.id)}
-            className={`w-full rounded-[26px] border p-5 text-left shadow-soft transition-all duration-300 active:scale-[0.99] ${
+            className={`w-full rounded-[28px] border p-5 text-left transition-all duration-300 active:scale-[0.99] ${
               active
-                ? "border-brand-300 bg-brand-50 shadow-float"
-                : "border-white/80 bg-white/85"
+                ? "border-pink-300 bg-[linear-gradient(135deg,rgba(255,240,247,0.96),rgba(255,255,255,0.98))] shadow-float"
+                : "border-white/80 bg-white/92 shadow-soft"
             }`}
           >
             <div className="flex items-start gap-4">
               <div
-                className={`mt-1 flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold ${
+                className={`mt-0.5 flex h-7 w-7 items-center justify-center rounded-full border text-xs font-semibold transition ${
                   active
-                    ? "border-brand-500 bg-brand-500 text-white"
-                    : "border-slate-300 text-slate-400"
+                    ? "border-pink-500 bg-pink-500 text-white"
+                    : "border-slate-200 text-slate-300"
                 }`}
               >
-                {active ? "✓" : ""}
+                {active ? "✓" : index + 1}
               </div>
-              <div>
-                <h3 className="text-sm font-semibold leading-6 text-slate-950">{option.label}</h3>
-                <p className="mt-1 text-xs leading-5 text-slate-500">
-                  선택 즉시 맞춤 전략 프리뷰가 아래에 반영됩니다.
+              <div className="space-y-1">
+                <h3 className="text-[15px] font-semibold leading-6 text-slate-950">{option.label}</h3>
+                <p className="text-xs leading-5 text-slate-500">
+                  선택한 고민이 아래 전략 미리 보기와 추천 행동에 연결됩니다.
                 </p>
               </div>
             </div>
@@ -314,21 +303,22 @@ function ConcernSelector({ options, selectedConcern, onSelect, onNext }) {
         );
       })}
 
-      <div
-        className={`grid transition-all duration-300 ${
-          selectedOption ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-        }`}
-      >
+      <div className={`grid transition-all duration-300 ${selectedOption ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
         <div className="overflow-hidden">
           {selectedOption ? (
-            <div className="rounded-[26px] bg-slate-950 p-5 text-white shadow-float">
-              <p className="text-xs font-semibold text-brand-200">바로 반영된 전략 예시</p>
-              <h3 className="mt-2 text-lg font-semibold">{selectedOption.previewTitle}</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-300">{selectedOption.previewText}</p>
+            <div className="rounded-[30px] border border-pink-200 bg-[linear-gradient(180deg,rgba(255,245,250,1),rgba(255,255,255,0.98))] p-5 shadow-float">
+              <div className="flex items-center gap-2 text-xs font-semibold text-pink-600">
+                <span className="h-2 w-2 rounded-full bg-pink-500" />
+                지금 선택한 고민에 맞춘 전략 흐름
+              </div>
+              <h3 className="mt-3 text-[22px] font-semibold leading-8 tracking-[-0.03em] text-slate-950">
+                {selectedOption.previewTitle}
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{selectedOption.previewText}</p>
               <button
                 type="button"
                 onClick={onNext}
-                className="mt-4 inline-flex items-center justify-center rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 transition active:scale-[0.98]"
+                className="mt-4 inline-flex items-center justify-center rounded-2xl bg-pink-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-pink-100 transition active:scale-[0.98]"
               >
                 다음으로 내 상황 선택하기
               </button>
@@ -342,8 +332,8 @@ function ConcernSelector({ options, selectedConcern, onSelect, onNext }) {
 
 function PersonalizationQuestion({ title, options, value, onChange }) {
   return (
-    <div className="space-y-3 rounded-[26px] border border-white/80 bg-white/85 p-5 shadow-soft">
-      <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+    <div className="space-y-3 rounded-[28px] border border-white/80 bg-white/92 p-5 shadow-soft">
+      <h3 className="text-[15px] font-semibold text-slate-900">{title}</h3>
       <div className="flex flex-wrap gap-2">
         {options.map((option) => {
           const active = option === value;
@@ -354,8 +344,8 @@ function PersonalizationQuestion({ title, options, value, onChange }) {
               onClick={() => onChange(option)}
               className={`rounded-full px-4 py-3 text-sm transition ${
                 active
-                  ? "bg-brand-600 text-white shadow-lg shadow-brand-100"
-                  : "bg-slate-100 text-slate-600 active:bg-slate-200"
+                  ? "bg-pink-500 text-white shadow-lg shadow-pink-100"
+                  : "bg-slate-50 text-slate-600 ring-1 ring-slate-100 active:bg-pink-50"
               }`}
             >
               {option}
@@ -375,27 +365,28 @@ function LiveSummaryPanel({ concernLabel, selectedUserStatus, selectedPrepStage 
   ];
 
   return (
-    <div className="rounded-[28px] bg-brand-900 p-5 text-white shadow-float">
-      <div className="flex items-center justify-between gap-3">
+    <div className="overflow-hidden rounded-[30px] border border-pink-100 bg-[linear-gradient(180deg,rgba(255,242,248,0.95),rgba(255,255,255,0.98))] p-5 shadow-float">
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold text-brand-200">현재 입력 요약</p>
-          <h3 className="mt-1 text-lg font-semibold">지금 상태가 아래처럼 정리되고 있어요</h3>
+          <h3 className="text-[21px] font-semibold tracking-[-0.03em] text-slate-950">
+            지금까지 입력한 정보가 이렇게 쌓이고 있어요
+          </h3>
+          <p className="mt-2 text-sm leading-6 text-slate-600">
+            이 정보를 바탕으로 AI가 지금 필요한 전략과 첫 행동을 정리합니다.
+          </p>
         </div>
-        <div className="rounded-full bg-white/10 px-3 py-1 text-[11px] text-brand-100">
+        <div className="rounded-full bg-white px-3 py-1 text-[11px] font-semibold text-pink-600 ring-1 ring-pink-100">
           실시간 반영
         </div>
       </div>
-      <div className="mt-4 space-y-3">
+      <div className="mt-5 space-y-3">
         {rows.map((row) => (
-          <div key={row.label} className="rounded-2xl bg-white/10 px-4 py-3">
-            <p className="text-[11px] text-brand-100">{row.label}</p>
-            <p className="mt-1 text-sm font-medium">{row.value}</p>
+          <div key={row.label} className="rounded-[22px] bg-white/90 px-4 py-3 ring-1 ring-pink-50">
+            <p className="text-[11px] text-slate-400">{row.label}</p>
+            <p className="mt-1 text-sm font-semibold text-slate-800">{row.value}</p>
           </div>
         ))}
       </div>
-      <p className="mt-4 text-xs leading-5 text-brand-100">
-        이 정보를 바탕으로 AI가 전략을 정리합니다
-      </p>
     </div>
   );
 }
@@ -417,36 +408,36 @@ function AnalysisPreview({
   }, [resetSignal]);
 
   useEffect(() => {
-    if (!triggered || analysisDone) return undefined;
+    if (!triggered) return undefined;
 
     setAnalysisStep(0);
     setAnalysisDone(false);
 
     const timers = [
-      setTimeout(() => setAnalysisStep(1), 850),
-      setTimeout(() => setAnalysisStep(2), 1700),
+      setTimeout(() => setAnalysisStep(1), 800),
+      setTimeout(() => setAnalysisStep(2), 1600),
       setTimeout(() => {
         setAnalysisStep(3);
         setAnalysisDone(true);
-      }, 2550),
+      }, 2400),
     ];
 
     return () => timers.forEach((timer) => clearTimeout(timer));
-  }, [analysisDone, triggered, resetSignal]);
+  }, [triggered, resetSignal]);
 
   const concern = concernOptions.find((option) => option.id === selectedConcern);
-  const progress = analysisDone ? 100 : analysisStep * 32 + 8;
+  const progress = analysisDone ? 100 : analysisStep * 30 + 12;
 
   return (
     <div className="space-y-4">
-      <div className="rounded-[28px] border border-white/80 bg-white/85 p-5 shadow-soft">
+      <div className="rounded-[30px] border border-white/80 bg-white/92 p-5 shadow-soft">
         <div className="flex items-center justify-between text-xs text-slate-500">
           <span>AI 분석 진행</span>
           <span>{Math.min(progress, 100)}%</span>
         </div>
-        <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-100">
+        <div className="mt-3 h-3 overflow-hidden rounded-full bg-pink-50">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-brand-400 via-brand-500 to-coral transition-all duration-700"
+            className="h-full rounded-full bg-gradient-to-r from-pink-300 via-pink-500 to-fuchsia-500 transition-all duration-700"
             style={{ width: `${Math.min(progress, 100)}%` }}
           />
         </div>
@@ -456,15 +447,11 @@ function AnalysisPreview({
             return (
               <div
                 key={status}
-                className={`flex items-center gap-3 rounded-2xl px-3 py-3 text-sm transition ${
-                  active ? "bg-brand-50 text-brand-800" : "bg-slate-50 text-slate-400"
+                className={`flex items-center gap-3 rounded-[20px] px-3 py-3 text-sm transition ${
+                  active ? "bg-pink-50 text-pink-700" : "bg-slate-50 text-slate-400"
                 }`}
               >
-                <span
-                  className={`h-2.5 w-2.5 rounded-full ${
-                    active ? "bg-brand-500" : "bg-slate-300"
-                  }`}
-                />
+                <span className={`h-2.5 w-2.5 rounded-full ${active ? "bg-pink-500" : "bg-slate-300"}`} />
                 {status}
               </div>
             );
@@ -472,37 +459,39 @@ function AnalysisPreview({
         </div>
       </div>
 
-      <div className="rounded-[28px] bg-slate-950 p-5 text-white shadow-float">
+      <div className="rounded-[30px] border border-pink-200 bg-[linear-gradient(180deg,rgba(255,245,250,1),rgba(255,255,255,0.98))] p-5 shadow-float">
         {analysisDone ? (
           <>
-            <p className="text-xs font-semibold text-brand-200">분석 결과 미리 보기</p>
-            <h3 className="mt-2 text-xl font-semibold">
-              지금은 {concern?.focus || "취업 전략 정리"}에 집중하는 것이 좋아요
+            <p className="text-sm font-semibold text-pink-600">AI가 정리한 현재 전략</p>
+            <h3 className="mt-2 text-[25px] font-semibold leading-9 tracking-[-0.04em] text-slate-950">
+              지금은 {concern?.focus || "취업 전략 정리"}부터 먼저 잡는 것이 좋아요
             </h3>
-            <p className="mt-3 text-sm leading-6 text-slate-300">
+            <p className="mt-3 text-sm leading-6 text-slate-600">
               {selectedUserStatus && selectedPrepStage
                 ? `현재 ${selectedUserStatus} 상태에서 ${selectedPrepStage} 단계라면, 먼저 확인해야 할 포인트를 정리해두는 것이 좋습니다.`
-                : "선택한 고민과 현재 상태를 더 입력하면 더 정교한 전략 흐름을 확인할 수 있어요."}
+                : "선택한 정보가 아직 일부만 입력되어 있어서, 우선은 기본 전략 방향을 중심으로 보여드리고 있어요."}
             </p>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
+            <p className="mt-2 text-sm leading-6 text-slate-600">
               {concern
-                ? "지금의 고민에 맞는 우선 전략부터 시작해보세요."
-                : "기본 프리뷰로는 전략 방향만 보여드리고 있어요."}
+                ? "지금의 고민에 맞는 우선 전략부터 가볍게 시작해보세요."
+                : "고민과 현재 상태를 더 입력하면 훨씬 구체적인 흐름으로 확장됩니다."}
             </p>
             <button
               type="button"
               onClick={onActionClick}
-              className="mt-4 inline-flex items-center justify-center rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 transition active:scale-[0.98]"
+              className="mt-4 inline-flex items-center justify-center rounded-2xl bg-pink-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-pink-100 transition active:scale-[0.98]"
             >
               추천 행동 보기
             </button>
           </>
         ) : (
           <>
-            <p className="text-xs font-semibold text-brand-200">분석 준비 중</p>
-            <h3 className="mt-2 text-xl font-semibold">입력한 정보를 바탕으로 전략을 정리하고 있어요</h3>
-            <p className="mt-3 text-sm leading-6 text-slate-300">
-              고민을 선택하고 현재 상황을 입력하면, 바로 실행할 수 있는 첫 행동까지 연결됩니다.
+            <p className="text-sm font-semibold text-pink-600">입력한 상황을 읽고 있어요</p>
+            <h3 className="mt-2 text-[24px] font-semibold leading-9 tracking-[-0.04em] text-slate-950">
+              지금 필요한 전략을 조용히 정리하는 중입니다
+            </h3>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              스크롤 흐름 안에서 바로 분석이 이어지고, 마지막에는 첫 행동 추천까지 연결됩니다.
             </p>
           </>
         )}
@@ -520,25 +509,27 @@ function PersonalizedActionCard({
   const concern = concernOptions.find((option) => option.id === selectedConcern) || concernOptions[1];
 
   return (
-    <div className="rounded-[30px] bg-gradient-to-br from-slate-950 via-slate-900 to-brand-900 p-5 text-white shadow-float">
-      <p className="text-xs font-semibold text-brand-200">첫 행동 추천</p>
-      <h3 className="mt-2 text-2xl font-semibold leading-tight">{concern.actionTitle}</h3>
-      <p className="mt-3 text-sm leading-6 text-slate-300">{concern.actionDescription}</p>
-      <div className="mt-4 rounded-[24px] bg-white/10 p-4">
-        <p className="text-[11px] text-brand-100">개인화 요약</p>
-        <p className="mt-2 text-sm leading-6 text-white">
+    <div className="rounded-[32px] border border-pink-200 bg-[linear-gradient(145deg,rgba(255,244,249,0.98),rgba(255,255,255,0.98))] p-5 shadow-float">
+      <p className="text-sm font-semibold text-pink-600">지금 바로 시작할 첫 행동</p>
+      <h3 className="mt-2 text-[28px] font-semibold leading-10 tracking-[-0.04em] text-slate-950">
+        {concern.actionTitle}
+      </h3>
+      <p className="mt-3 text-sm leading-6 text-slate-600">{concern.actionDescription}</p>
+      <div className="mt-5 rounded-[24px] bg-white/95 p-4 ring-1 ring-pink-100">
+        <p className="text-[11px] text-slate-400">개인화 요약</p>
+        <p className="mt-2 text-sm leading-6 text-slate-700">
           {selectedUserStatus && selectedPrepStage
             ? `현재는 ${selectedUserStatus} 상태이며, ${selectedPrepStage} 단계에 맞는 우선 행동이 중요합니다.`
-            : "현재 상황을 모두 선택하면 더 정확한 행동 추천으로 확장됩니다."}
+            : "현재 상황이 모두 선택되면 지금보다 더 세밀한 추천으로 연결됩니다."}
         </p>
-        <p className="mt-2 text-sm leading-6 text-slate-300">
+        <p className="mt-2 text-sm leading-6 text-slate-600">
           지금의 고민에 맞춰 바로 실행 가능한 첫 단계부터 시작해보세요.
         </p>
       </div>
       <button
         type="button"
         onClick={onPrimaryClick}
-        className="mt-5 flex w-full items-center justify-center rounded-2xl bg-white px-4 py-4 text-sm font-semibold text-slate-950 transition active:scale-[0.98]"
+        className="mt-5 flex w-full items-center justify-center rounded-2xl bg-pink-500 px-4 py-4 text-sm font-semibold text-white shadow-lg shadow-pink-100 transition active:scale-[0.98]"
       >
         {concern.actionTitle}
       </button>
@@ -550,15 +541,15 @@ function StickyMobileCTA({ visible, label, onClick }) {
   return (
     <div
       className={`fixed inset-x-0 bottom-0 z-40 transition duration-300 ${
-        visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0 pointer-events-none"
+        visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-8 opacity-0"
       }`}
     >
       <div className="mx-auto max-w-md px-4 pb-4">
-        <div className="rounded-[28px] border border-white/70 bg-white/88 p-3 shadow-soft backdrop-blur">
+        <div className="rounded-[28px] border border-white/80 bg-white/92 p-3 shadow-soft backdrop-blur">
           <button
             type="button"
             onClick={onClick}
-            className="flex w-full items-center justify-center rounded-[20px] bg-brand-600 px-4 py-4 text-sm font-semibold text-white transition active:scale-[0.99]"
+            className="flex w-full items-center justify-center rounded-[20px] bg-pink-500 px-4 py-4 text-sm font-semibold text-white shadow-lg shadow-pink-100 transition active:scale-[0.99]"
           >
             {label}
           </button>
@@ -572,17 +563,17 @@ function BottomSheetModal({ open, onClose, onRestart }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 bg-white/30 backdrop-blur-sm">
       <button type="button" aria-label="닫기" onClick={onClose} className="absolute inset-0 w-full" />
       <div className="absolute inset-x-0 bottom-0 mx-auto max-w-md px-4 pb-4">
-        <div className="animate-sheet-up rounded-[32px] bg-white p-6 shadow-soft">
-          <div className="mx-auto mb-4 h-1.5 w-14 rounded-full bg-slate-200" />
-          <p className="text-xs font-semibold text-brand-700">서비스 연결 프리뷰</p>
-          <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-slate-950">
+        <div className="animate-sheet-up rounded-[34px] border border-white/80 bg-white p-6 shadow-soft">
+          <div className="mx-auto mb-4 h-1.5 w-14 rounded-full bg-pink-100" />
+          <p className="text-sm font-semibold text-pink-600">다음 연결 화면</p>
+          <h3 className="mt-2 text-[28px] font-semibold leading-10 tracking-[-0.04em] text-slate-950">
             실제 서비스에서는 여기서 상세 전략 화면으로 연결됩니다
           </h3>
           <p className="mt-3 text-sm leading-6 text-slate-600">
-            현재 랜딩 페이지는 온보딩 전환 직전 경험을 보여주는 데모입니다. 이후 화면에서는 맞춤 전략, 우선순위, 추천 공고 흐름으로 자연스럽게 이어질 수 있습니다.
+            현재 랜딩 페이지는 온보딩 직전의 경험을 미리 보여주는 형태입니다. 이후 화면에서는 맞춤 전략, 준비 우선순위, 추천 공고 흐름으로 자연스럽게 이어질 수 있습니다.
           </p>
           <div className="mt-6 grid grid-cols-2 gap-3">
             <button
@@ -595,7 +586,7 @@ function BottomSheetModal({ open, onClose, onRestart }) {
             <button
               type="button"
               onClick={onRestart}
-              className="rounded-2xl bg-brand-600 px-4 py-4 text-sm font-semibold text-white"
+              className="rounded-2xl bg-pink-500 px-4 py-4 text-sm font-semibold text-white shadow-lg shadow-pink-100"
             >
               처음부터 다시 보기
             </button>
@@ -611,9 +602,7 @@ export default function App() {
   const personalizationSectionRef = useRef(null);
   const analysisSectionRef = useRef(null);
   const actionSectionRef = useRef(null);
-  const finalSectionRef = useRef(null);
 
-  // Selections are shared across sections so the landing page feels like a lightweight onboarding preview.
   const [selectedConcern, setSelectedConcern] = useState("");
   const [selectedUserStatus, setSelectedUserStatus] = useState("");
   const [selectedPrepStage, setSelectedPrepStage] = useState("");
@@ -626,20 +615,14 @@ export default function App() {
   const [analysisViewportRef, analysisInView] = useInView({ threshold: 0.35, once: false });
 
   useEffect(() => {
-    const handleScroll = () => {
-      setShowSticky(window.scrollY > 360);
-    };
-
+    const handleScroll = () => setShowSticky(window.scrollY > 320);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    // Reaching the analysis section should feel automatic even if the user doesn't press the preview CTA.
-    if (analysisInView) {
-      setAnalysisRequested(true);
-    }
+    if (analysisInView) setAnalysisRequested(true);
   }, [analysisInView]);
 
   const selectedConcernData = useMemo(
@@ -660,7 +643,7 @@ export default function App() {
     setAnalysisRequested(false);
     setSheetOpen(false);
     setResetSignal((value) => value + 1);
-    setTimeout(() => scrollToRef(concernSectionRef), 60);
+    setTimeout(() => scrollToRef(concernSectionRef), 80);
   };
 
   const stickyLabel = allSelected
@@ -686,158 +669,146 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-transparent text-slate-950">
-      <div className="mx-auto flex min-h-screen max-w-md flex-col pb-28">
-        <div>
-          <MobileLandingHero onPrimaryClick={() => scrollToRef(concernSectionRef)} />
-        </div>
+      <div className="mx-auto max-w-md pb-28">
+        <MobileLandingHero onPrimaryClick={() => scrollToRef(concernSectionRef)} />
 
-        <main className="px-5 pb-12 pt-8">
-          <section className="space-y-5">
-            <SectionTitle
-              eyebrow="공감에서 시작"
+        <main className="relative px-5 pb-12 pt-8">
+          <div className="pointer-events-none absolute left-[30px] top-0 bottom-0 w-px bg-gradient-to-b from-pink-100 via-pink-200/70 to-transparent" />
+
+          <div className="relative space-y-16">
+            <SectionBlock
               title="이런 고민, 한 번쯤 해보셨을 거예요"
-              description="지치기 쉬운 취업 준비 과정에서 가장 먼저 필요한 건, 내 상황을 이해받는 감각입니다."
-            />
-            <div className="space-y-4">
-              {empathyCards.map((card, index) => (
-                <EmpathyCard key={card.title} {...card} delay={index * 80} />
-              ))}
-            </div>
-          </section>
+              description="지치기 쉬운 취업 준비 과정에서 가장 먼저 필요한 건, 내 상황을 이해받고 있다는 감각입니다."
+            >
+              <div className="space-y-4">
+                {empathyCards.map((card, index) => (
+                  <EmpathyCard key={card.title} {...card} delay={index * 90} />
+                ))}
+              </div>
+            </SectionBlock>
 
-          <section className="mt-16 space-y-5">
-            <SectionTitle
-              eyebrow="문제 구조"
+            <SectionBlock
               title="문제는 의지가 아니라, 판단 기준이 없다는 점입니다"
               description="취업 준비가 힘든 이유는 게을러서가 아니라, 수많은 선택지 속에서 무엇을 먼저 봐야 하는지 알기 어렵기 때문입니다."
-            />
-            <div className="space-y-3">
-              {problemBlocks.map((block, index) => (
-                <AccordionProblemBlock
-                  key={block.title}
-                  title={block.title}
-                  detail={block.detail}
-                  open={openProblem === index}
-                  onClick={() => setOpenProblem((current) => (current === index ? -1 : index))}
-                />
-              ))}
-            </div>
-          </section>
+            >
+              <div className="space-y-3">
+                {problemBlocks.map((block, index) => (
+                  <AccordionProblemBlock
+                    key={block.title}
+                    title={block.title}
+                    detail={block.detail}
+                    open={openProblem === index}
+                    onClick={() => setOpenProblem((current) => (current === index ? -1 : index))}
+                  />
+                ))}
+              </div>
+            </SectionBlock>
 
-          <section ref={concernSectionRef} className="mt-16 space-y-5 scroll-mt-24">
-            <SectionTitle
-              eyebrow="상황 선택 1"
+            <SectionBlock
               title="지금 가장 필요한 도움은 무엇인가요?"
-              description="현재 고민을 선택하면 그에 맞는 전략 예시를 바로 보여드릴게요."
-            />
-            <ConcernSelector
-              options={concernOptions}
-              selectedConcern={selectedConcern}
-              onSelect={setSelectedConcern}
-              onNext={() => scrollToRef(personalizationSectionRef)}
-            />
-          </section>
+              description="현재 고민을 선택하면, 바로 아래에서 전략 예시가 자연스럽게 이어집니다."
+            >
+              <div ref={concernSectionRef} className="scroll-mt-24">
+                <ConcernSelector
+                  selectedConcern={selectedConcern}
+                  onSelect={setSelectedConcern}
+                  onNext={() => scrollToRef(personalizationSectionRef)}
+                />
+              </div>
+            </SectionBlock>
 
-          <section ref={personalizationSectionRef} className="mt-16 space-y-5 scroll-mt-24">
-            <SectionTitle
-              eyebrow="상황 선택 2"
+            <SectionBlock
               title="복잡한 입력 없이, 지금 상태만 알려주세요"
               description="몇 가지 선택만으로 현재 상황에 맞는 전략 방향을 정리할 수 있어요."
-            />
-            <div className="space-y-4">
-              <PersonalizationQuestion
-                title="현재 어떤 상황인가요?"
-                options={userStatusOptions}
-                value={selectedUserStatus}
-                onChange={setSelectedUserStatus}
-              />
-              <PersonalizationQuestion
-                title="현재 준비 상태는 어느 정도인가요?"
-                options={prepStageOptions}
-                value={selectedPrepStage}
-                onChange={setSelectedPrepStage}
-              />
-              <LiveSummaryPanel
-                concernLabel={selectedConcernData?.label}
-                selectedUserStatus={selectedUserStatus}
-                selectedPrepStage={selectedPrepStage}
-              />
+            >
+              <div ref={personalizationSectionRef} className="space-y-4 scroll-mt-24">
+                <PersonalizationQuestion
+                  title="현재 어떤 상황인가요?"
+                  options={userStatusOptions}
+                  value={selectedUserStatus}
+                  onChange={setSelectedUserStatus}
+                />
+                <PersonalizationQuestion
+                  title="현재 준비 상태는 어느 정도인가요?"
+                  options={prepStageOptions}
+                  value={selectedPrepStage}
+                  onChange={setSelectedPrepStage}
+                />
+                <LiveSummaryPanel
+                  concernLabel={selectedConcernData?.label}
+                  selectedUserStatus={selectedUserStatus}
+                  selectedPrepStage={selectedPrepStage}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAnalysisRequested(true);
+                    scrollToRef(analysisSectionRef);
+                  }}
+                  className="flex w-full items-center justify-center rounded-[22px] bg-pink-500 px-4 py-4 text-sm font-semibold text-white shadow-lg shadow-pink-100 transition active:scale-[0.99]"
+                >
+                  AI 전략 미리 보기
+                </button>
+              </div>
+            </SectionBlock>
+
+            <SectionBlock
+              title="AI가 지금 필요한 전략을 정리하고 있어요"
+              description="선택한 고민과 현재 상태를 바탕으로 준비 방향과 첫 행동을 분석합니다."
+            >
+              <div ref={analysisSectionRef} className="scroll-mt-24">
+                <div ref={analysisViewportRef}>
+                  <AnalysisPreview
+                    triggered={analysisRequested || analysisInView}
+                    onActionClick={() => scrollToRef(actionSectionRef)}
+                    selectedConcern={selectedConcern}
+                    selectedUserStatus={selectedUserStatus}
+                    selectedPrepStage={selectedPrepStage}
+                    resetSignal={resetSignal}
+                  />
+                </div>
+              </div>
+            </SectionBlock>
+
+            <SectionBlock
+              title="지금 바로 시작할 수 있는 첫 행동을 제안해요"
+              description="전략은 읽고 끝나는 것이 아니라, 바로 실행 가능한 한 걸음으로 이어져야 합니다."
+            >
+              <div ref={actionSectionRef} className="scroll-mt-24">
+                <PersonalizedActionCard
+                  selectedConcern={selectedConcern}
+                  selectedUserStatus={selectedUserStatus}
+                  selectedPrepStage={selectedPrepStage}
+                  onPrimaryClick={() => setSheetOpen(true)}
+                />
+              </div>
+            </SectionBlock>
+
+            <section className="rounded-[34px] border border-pink-100 bg-[linear-gradient(180deg,rgba(255,246,250,1),rgba(255,255,255,1))] p-6 text-center shadow-float">
+              <h2 className="text-[32px] font-bold leading-[1.18] tracking-[-0.05em] text-slate-950">
+                막막한 취업 준비,
+                <br />
+                이제 전략적으로 시작해보세요
+              </h2>
+              <p className="mt-3 text-[15px] leading-7 text-slate-600">
+                몇 가지 선택만으로 지금 내 상황에 맞는 취업 전략과 첫 행동을 바로 확인할 수 있습니다.
+              </p>
               <button
                 type="button"
                 onClick={() => {
-                  setAnalysisRequested(true);
-                  scrollToRef(analysisSectionRef);
+                  if (allSelected) {
+                    setSheetOpen(true);
+                  } else {
+                    scrollToRef(concernSectionRef);
+                  }
                 }}
-                className="flex w-full items-center justify-center rounded-[22px] bg-slate-950 px-4 py-4 text-sm font-semibold text-white transition active:scale-[0.99]"
+                className="mt-5 flex w-full items-center justify-center rounded-[22px] bg-pink-500 px-4 py-4 text-sm font-semibold text-white shadow-lg shadow-pink-100 transition active:scale-[0.99]"
               >
-                AI 전략 미리 보기
+                내 취업 전략 확인하기
               </button>
-            </div>
-          </section>
-
-          <section
-            ref={analysisSectionRef}
-            className="mt-16 space-y-5 scroll-mt-24"
-          >
-            <div ref={analysisViewportRef}>
-              <SectionTitle
-                eyebrow="AI 분석"
-                title="AI가 지금 필요한 전략을 정리하고 있어요"
-                description="선택한 고민과 현재 상태를 바탕으로 준비 방향과 첫 행동을 분석합니다."
-              />
-            </div>
-            <AnalysisPreview
-              triggered={analysisRequested || analysisInView}
-              onActionClick={() => scrollToRef(actionSectionRef)}
-              selectedConcern={selectedConcern}
-              selectedUserStatus={selectedUserStatus}
-              selectedPrepStage={selectedPrepStage}
-              resetSignal={resetSignal}
-            />
-          </section>
-
-          <section ref={actionSectionRef} className="mt-16 space-y-5 scroll-mt-24">
-            <SectionTitle
-              eyebrow="실행 전환"
-              title="지금 바로 시작할 수 있는 첫 행동을 제안해요"
-              description="전략이 정리되면, 그다음은 바로 시작 가능한 첫 행동으로 연결되어야 합니다."
-            />
-            <PersonalizedActionCard
-              selectedConcern={selectedConcern}
-              selectedUserStatus={selectedUserStatus}
-              selectedPrepStage={selectedPrepStage}
-              onPrimaryClick={() => setSheetOpen(true)}
-            />
-          </section>
-
-          <section
-            ref={finalSectionRef}
-            className="mt-16 rounded-[32px] bg-white/85 p-6 text-center shadow-soft"
-          >
-            <p className="text-xs font-semibold text-brand-700">1분 안에 시작</p>
-            <h2 className="mt-3 text-[30px] font-bold leading-[1.2] tracking-[-0.04em] text-slate-950">
-              막막한 취업 준비,
-              <br />
-              이제 전략적으로 시작해보세요
-            </h2>
-            <p className="mt-3 text-sm leading-6 text-slate-600">
-              몇 가지 선택만으로 지금 내 상황에 맞는 취업 전략과 첫 행동을 바로 확인할 수 있습니다.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                if (allSelected) {
-                  setSheetOpen(true);
-                } else {
-                  scrollToRef(concernSectionRef);
-                }
-              }}
-              className="mt-5 flex w-full items-center justify-center rounded-[22px] bg-brand-600 px-4 py-4 text-sm font-semibold text-white transition active:scale-[0.99]"
-            >
-              내 취업 전략 확인하기
-            </button>
-            <p className="mt-3 text-xs text-slate-400">지금 바로 1분 안에 시작할 수 있어요</p>
-          </section>
+              <p className="mt-3 text-xs text-slate-400">지금 바로 1분 안에 시작할 수 있어요</p>
+            </section>
+          </div>
         </main>
       </div>
 
